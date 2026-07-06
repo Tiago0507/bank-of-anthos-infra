@@ -11,11 +11,6 @@ output "state_bucket_arn" {
   value = aws_s3_bucket.tfstate.arn
 }
 
-output "lock_table_name" {
-  description = "DynamoDB table used for Terraform state locking."
-  value       = aws_dynamodb_table.tf_lock.name
-}
-
 output "aws_region" {
   value = var.aws_region
 }

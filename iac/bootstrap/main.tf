@@ -51,18 +51,3 @@ resource "aws_s3_bucket_public_access_block" "tfstate" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
-
-# The state lock table. Terraform writes one item here, keyed by the state
-# file's path in the "LockID" attribute, for the duration of a plan or
-# apply, and deletes it when done. A concurrent apply against the same
-# state fails fast with "state locked" instead of racing.
-resource "aws_dynamodb_table" "tf_lock" {
-  name         = "${var.project_name}-tfstate-lock"
-  billing_mode = "PAY_PER_REQUEST" # Avoids capacity planning for a single developer; billed only per lock/unlock request.
-  hash_key     = "LockID"
-
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
-}
