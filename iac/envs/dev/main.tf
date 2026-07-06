@@ -1,0 +1,27 @@
+module "ecr" {
+  source = "../../modules/ecr"
+
+  repository_names = var.ecr_repository_names
+}
+
+module "vpc" {
+  source = "../../modules/vpc"
+
+  cluster_name = var.cluster_name
+}
+
+module "eks" {
+  source = "../../modules/eks"
+
+  cluster_name       = var.cluster_name
+  private_subnet_ids = module.vpc.private_subnet_ids
+  public_subnet_ids  = module.vpc.public_subnet_ids
+}
+
+module "irsa" {
+  source = "../../modules/irsa"
+
+  cluster_name      = var.cluster_name
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  oidc_provider_url = module.eks.oidc_provider_url
+}
