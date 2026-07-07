@@ -25,3 +25,11 @@ module "irsa" {
   oidc_provider_arn = module.eks.oidc_provider_arn
   oidc_provider_url = module.eks.oidc_provider_url
 }
+
+module "github_oidc" {
+  source = "../../modules/github-oidc"
+
+  github_org          = var.github_org
+  github_repo         = var.github_repo
+  ecr_repository_arns = values(module.ecr.repository_arns)
+}

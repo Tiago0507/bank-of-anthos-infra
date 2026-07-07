@@ -16,6 +16,18 @@ variable "cluster_name" {
   default     = "bank-of-anthos-dev"
 }
 
+variable "github_org" {
+  description = "GitHub organization or username that owns the application repository, used to scope the GitHub Actions OIDC (OpenID Connect) trust policy."
+  type        = string
+  default     = "Tiago0507"
+}
+
+variable "github_repo" {
+  description = "Name of the GitHub repository allowed to assume the GitHub Actions IAM role."
+  type        = string
+  default     = "bank-of-anthos"
+}
+
 variable "ecr_repository_names" {
   description = "Names of the ECR repositories to create, one per container image built by this project."
   type        = set(string)

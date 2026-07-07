@@ -6,11 +6,13 @@ resource "aws_ecr_repository" "this" {
 
   name = each.value
 
-  # MUTABLE allows the same tag (for example "latest") to be pushed more
-  # than once, overwriting the previous image. Chosen deliberately for this
-  # learning project while images are pushed by hand; IMMUTABLE is the
-  # standard choice once a CI pipeline tags images by commit SHA instead.
-  image_tag_mutability = "MUTABLE"
+  # IMMUTABLE rejects a push that reuses a tag already present in the
+  # repository, so a tag always points to exactly one image. Left as
+  # MUTABLE during Fase 3, while images were pushed by hand and reused the
+  # "latest" tag repeatedly; switched once the Fase 4 CI pipeline started
+  # tagging every image by commit SHA, since a unique tag per build removes
+  # the friction MUTABLE existed to avoid.
+  image_tag_mutability = "IMMUTABLE"
 
   # Free vulnerability scan on every image pushed to this repository. Does
   # not replace the Trivy scan planned for the CI pipeline; it is an

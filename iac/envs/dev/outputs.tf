@@ -42,3 +42,8 @@ output "irsa_role_arn" {
   description = "ARN (Amazon Resource Name) of the IRSA (IAM Roles for Service Accounts) role. Set this as the eks.amazonaws.com/role-arn annotation on the bank-of-anthos ServiceAccount."
   value       = module.irsa.role_arn
 }
+
+output "github_actions_role_arn" {
+  description = "ARN (Amazon Resource Name) of the IAM role GitHub Actions assumes via OIDC (OpenID Connect). Set this as the AWS_ROLE_ARN repository variable in GitHub (Settings > Secrets and variables > Actions > Variables)."
+  value       = module.github_oidc.role_arn
+}
