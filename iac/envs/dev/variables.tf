@@ -28,6 +28,22 @@ variable "github_repo" {
   default     = "bank-of-anthos"
 }
 
+variable "gitops_reader_app_id" {
+  description = "App ID of the bank-of-anthos-gitops-reader GitHub App, used by ArgoCD to read bank-of-anthos-gitops."
+  type        = string
+}
+
+variable "gitops_reader_installation_id" {
+  description = "Installation ID of the bank-of-anthos-gitops-reader GitHub App on bank-of-anthos-gitops."
+  type        = string
+}
+
+variable "gitops_reader_private_key" {
+  description = "Private key (PEM) of the bank-of-anthos-gitops-reader GitHub App. No default: must be supplied via a gitignored *.auto.tfvars file or a TF_VAR_ environment variable, never committed."
+  type        = string
+  sensitive   = true
+}
+
 variable "ecr_repository_names" {
   description = "Names of the ECR repositories to create, one per container image built by this project."
   type        = set(string)

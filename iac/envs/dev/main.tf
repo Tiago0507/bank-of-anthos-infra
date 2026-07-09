@@ -33,3 +33,12 @@ module "github_oidc" {
   github_repo         = var.github_repo
   ecr_repository_arns = values(module.ecr.repository_arns)
 }
+
+module "argocd" {
+  source = "../../modules/argocd"
+
+  github_org                    = var.github_org
+  gitops_reader_app_id          = var.gitops_reader_app_id
+  gitops_reader_installation_id = var.gitops_reader_installation_id
+  gitops_reader_private_key     = var.gitops_reader_private_key
+}
