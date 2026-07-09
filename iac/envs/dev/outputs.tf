@@ -1,0 +1,49 @@
+output "ecr_repository_urls" {
+  description = "Map of service name to its ECR repository URL."
+  value       = module.ecr.repository_urls
+}
+
+output "ecr_repository_arns" {
+  description = "Map of service name to its ECR repository ARN."
+  value       = module.ecr.repository_arns
+}
+
+output "vpc_id" {
+  description = "ID of the VPC (Virtual Private Cloud)."
+  value       = module.vpc.vpc_id
+}
+
+output "public_subnet_ids" {
+  description = "IDs of the public subnets, one per AZ (Availability Zone)."
+  value       = module.vpc.public_subnet_ids
+}
+
+output "private_subnet_ids" {
+  description = "IDs of the private subnets, one per AZ (Availability Zone)."
+  value       = module.vpc.private_subnet_ids
+}
+
+output "eks_cluster_name" {
+  description = "Name of the EKS (Elastic Kubernetes Service) cluster."
+  value       = module.eks.cluster_name
+}
+
+output "eks_cluster_endpoint" {
+  description = "URL of the Kubernetes API server."
+  value       = module.eks.cluster_endpoint
+}
+
+output "eks_oidc_provider_arn" {
+  description = "ARN (Amazon Resource Name) of the cluster's OIDC (OpenID Connect) provider, needed by the IRSA (IAM Roles for Service Accounts) module."
+  value       = module.eks.oidc_provider_arn
+}
+
+output "irsa_role_arn" {
+  description = "ARN (Amazon Resource Name) of the IRSA (IAM Roles for Service Accounts) role. Set this as the eks.amazonaws.com/role-arn annotation on the bank-of-anthos ServiceAccount."
+  value       = module.irsa.role_arn
+}
+
+output "github_actions_role_arn" {
+  description = "ARN (Amazon Resource Name) of the IAM role GitHub Actions assumes via OIDC (OpenID Connect). Set this as the AWS_ROLE_ARN repository variable in GitHub (Settings > Secrets and variables > Actions > Variables)."
+  value       = module.github_oidc.role_arn
+}
