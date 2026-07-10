@@ -11,9 +11,9 @@ variable "project_name" {
 }
 
 variable "cluster_name" {
-  description = "Name of the EKS (Elastic Kubernetes Service) cluster for this environment. Used now to tag the VPC's (Virtual Private Cloud's) subnets, and later to actually create the EKS cluster with this exact name."
+  description = "Name of the EKS (Elastic Kubernetes Service) cluster shared by the dev and staging namespaces. Used now to tag the VPC's (Virtual Private Cloud's) subnets, and later to actually create the EKS cluster with this exact name."
   type        = string
-  default     = "bank-of-anthos-dev"
+  default     = "bank-of-anthos-nonprod"
 }
 
 variable "github_org" {
