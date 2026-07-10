@@ -39,20 +39,22 @@ resource "kubernetes_secret" "gitops_repo_credentials" {
   depends_on = [helm_release.argocd]
 }
 
-# The Application custom resource: tells this ArgoCD installation which
-# repository, branch, and path to watch, and where to deploy what it
-# finds there. depends_on is required here, not just implied by a
-# reference: kubernetes_manifest has no other way to know the Application
-# CRD (Custom Resource Definition, what teaches Kubernetes this resource
-# type even exists) is only installed once the Helm release above
-# finishes, since nothing in this resource's own arguments points back to
+# One Application per environment this installation manages (dev+staging
+# for the shared nonprod cluster, just prod for the dedicated prod
+# cluster). depends_on is required here, not just implied by a reference:
+# kubernetes_manifest has no other way to know the Application CRD
+# (Custom Resource Definition, what teaches Kubernetes this resource type
+# even exists) is only installed once the Helm release above finishes,
+# since nothing in this resource's own arguments points back to
 # helm_release.argocd.
-resource "kubernetes_manifest" "bank_of_anthos" {
+resource "kubernetes_manifest" "applications" {
+  for_each = var.environments
+
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
     metadata = {
-      name      = "bank-of-anthos"
+      name      = "bank-of-anthos-${each.key}"
       namespace = "argocd"
     }
     spec = {
@@ -61,17 +63,19 @@ resource "kubernetes_manifest" "bank_of_anthos" {
       source = {
         repoURL        = "https://github.com/${var.github_org}/bank-of-anthos-gitops"
         targetRevision = "main"
-        path           = "kubernetes-manifests"
+        path           = "overlays/${each.key}"
       }
 
       destination = {
         server    = "https://kubernetes.default.svc"
-        namespace = var.app_namespace
+        namespace = each.key
       }
 
       # automated (vs. requiring a manual "Sync" click) matches the
       # existing decision that a push to main deploys without a manual
-      # approval step, for this single dev environment.
+      # approval step. Revisit for prod once PR-based promotion between
+      # environments is in place, if a manual approval gate is wanted
+      # there.
       #
       # prune: removes cluster resources whose manifest was deleted from
       # the repo, keeping the cluster from accumulating orphans.

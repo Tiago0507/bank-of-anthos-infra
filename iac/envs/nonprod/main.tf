@@ -37,6 +37,7 @@ module "github_oidc" {
 module "argocd" {
   source = "../../modules/argocd"
 
+  environments                  = ["dev", "staging"]
   github_org                    = var.github_org
   gitops_reader_app_id          = var.gitops_reader_app_id
   gitops_reader_installation_id = var.gitops_reader_installation_id
