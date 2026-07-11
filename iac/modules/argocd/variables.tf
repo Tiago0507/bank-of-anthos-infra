@@ -3,10 +3,9 @@ variable "github_org" {
   type        = string
 }
 
-variable "app_namespace" {
-  description = "Kubernetes namespace where the application's own resources (Deployments, Services, etc.) get deployed. Separate from the argocd namespace, where ArgoCD itself runs."
-  type        = string
-  default     = "default"
+variable "environments" {
+  description = "Environment names this ArgoCD installation manages. One Application is created per entry, watching overlays/<name> in bank-of-anthos-gitops and deploying into the <name> namespace — both the overlay path and the destination namespace are derived directly from this name."
+  type        = set(string)
 }
 
 variable "chart_version" {

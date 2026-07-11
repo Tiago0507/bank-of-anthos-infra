@@ -1,8 +1,8 @@
-module "ecr" {
-  source = "../../modules/ecr"
-
-  repository_names = var.ecr_repository_names
-}
+# No ecr or github_oidc module here: ECR (Elastic Container Registry) is
+# account-wide, not per-cluster, and the CI never needs prod-specific AWS
+# access (it only ever publishes to the one shared registry that
+# envs/nonprod already created). Duplicating either here would conflict
+# with (or pointlessly copy) what already exists there.
 
 module "vpc" {
   source = "../../modules/vpc"
@@ -26,17 +26,10 @@ module "irsa" {
   oidc_provider_url = module.eks.oidc_provider_url
 }
 
-module "github_oidc" {
-  source = "../../modules/github-oidc"
-
-  github_org          = var.github_org
-  github_repo         = var.github_repo
-  ecr_repository_arns = values(module.ecr.repository_arns)
-}
-
 module "argocd" {
   source = "../../modules/argocd"
 
+  environments                  = ["prod"]
   github_org                    = var.github_org
   gitops_reader_app_id          = var.gitops_reader_app_id
   gitops_reader_installation_id = var.gitops_reader_installation_id

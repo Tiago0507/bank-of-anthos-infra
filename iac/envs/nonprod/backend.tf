@@ -5,7 +5,7 @@
 terraform {
   backend "s3" {
     bucket       = "bank-of-anthos-tfstate-826113468369"
-    key          = "envs/dev/terraform.tfstate"
+    key          = "envs/nonprod/terraform.tfstate"
     region       = "us-east-1"
     use_lockfile = true
     encrypt      = true
